@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 //https://stackoverflow.com/questions/35842751/lombok-not-working-with-sts
 @SpringBootApplication
-@ComponentScan(basePackages = "com.dxc.ticket.sytem.mapper")
+//@ComponentScan(basePackages = "com.dxc.ticket.sytem.mapper")
 public class TicketingSystemApplication {
 
 	public static void main(String[] args) {
