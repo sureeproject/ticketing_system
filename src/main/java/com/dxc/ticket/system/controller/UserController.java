@@ -1,8 +1,11 @@
 package com.dxc.ticket.system.controller;
 
+import org.apache.tomcat.util.http.parser.Authorization;
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,37 +25,34 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        UserDto user = userService.getUserById(id);
-        return ResponseEntity.ok(user);
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-        UserDto createdUser = userService.createUser(userDto);
+        ResponseEntity response = null;
+        try {
+            String hashPwd = passwordEncoder.encode(userDto.getPassword());
+            userDto.setPassword(hashPwd);
+            UserDto updatedUser =  userService.createUser(userDto);
+            if (updatedUser.getId() > 0) {
+                response = ResponseEntity
+                        .status(HttpStatus.CREATED)
+                        .body("Given user details are successfully registered");
+            }
+        } catch (Exception ex) {
+            response = ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An exception occured due to " + ex.getMessage());
+        }
+        return response;
+
+    }
+
+    @GetMapping("/signin")
+    public ResponseEntity<UserDto> signIn(Authentication userDto) {
+        UserDto createdUser = userService.getUserByEmail(userDto.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
-        UserDto updatedUser = userService.updateUser(id, userDto);
-        return ResponseEntity.ok(updatedUser);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
-    }
-    
-    @PostMapping("/signin")
-    public ResponseEntity<?> signIn(@RequestBody UserDto signInRequest) {
-    	//Step1. encrypt password suresh
-    			//Step2. JWT Token and save it into database
-    	//user details verified
-    			//Step2. JWT generate for this user suresh --> send to as response 
-    	return ResponseEntity.noContent().build();
     }
     
     

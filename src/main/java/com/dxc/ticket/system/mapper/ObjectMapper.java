@@ -1,4 +1,4 @@
-package com.dxc.ticket.sytem.mapper;
+package com.dxc.ticket.system.mapper;
 
 import org.springframework.beans.BeanUtils;
 
