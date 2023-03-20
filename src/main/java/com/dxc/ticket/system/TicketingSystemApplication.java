@@ -6,9 +6,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 //https://stackoverflow.com/questions/35842751/lombok-not-working-with-sts
 
+
+@EnableScheduling
 @SpringBootApplication
 public class TicketingSystemApplication {
 

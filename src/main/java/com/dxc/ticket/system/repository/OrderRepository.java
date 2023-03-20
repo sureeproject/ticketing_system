@@ -12,4 +12,5 @@ import com.dxc.ticket.system.model.User;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findAll(Pageable pageable);
     List<Order> findByUser(User user);
+    void deleteByTicketId(Long ticketId);
 }
