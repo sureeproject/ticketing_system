@@ -1,6 +1,7 @@
 package com.dxc.ticket.system.configuration;
 
 import com.dxc.ticket.system.filter.JWTTokenGeneratorFilter;
+import com.dxc.ticket.system.filter.JWTTokenValidatorFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,10 +37,12 @@ public class ProjectSecurityConfig {
                         config.setMaxAge(3600L);
                         return config;
                     }
-                }).and().addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+                }).and()
+                .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
                 .requestMatchers("/users/signup","/users/signin").permitAll()
-                .requestMatchers("","").authenticated()
+                .anyRequest().authenticated()
                 .and().formLogin()
                 .and().httpBasic();
         return http.build();

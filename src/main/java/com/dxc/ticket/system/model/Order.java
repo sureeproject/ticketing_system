@@ -2,6 +2,7 @@ package com.dxc.ticket.system.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,10 +32,12 @@ public class Order {
 
 	@ManyToOne
 	@JoinColumn(name = "fk_user_id")
+	@JsonIgnore
 	private User user;
 
 	@ManyToOne
 	@JoinColumn(name = "fk_ticket_id")
+	@JsonIgnore
 	private Ticket ticket;
 
 	@Column(name = "create_time")

@@ -19,7 +19,7 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;
 
-	
+
 	@GetMapping("/users/{userId}")
     public ResponseEntity<List<Order>> getAllOrdersByUser(@PathVariable Long userId) {
         List<Order> orders = orderService.getAllOrdersByUser(userId);

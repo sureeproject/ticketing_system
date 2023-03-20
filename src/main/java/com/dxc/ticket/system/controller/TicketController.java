@@ -2,6 +2,7 @@ package com.dxc.ticket.system.controller;
 
 import java.util.List;
 
+import com.dxc.ticket.system.dto.TicketDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,9 +36,9 @@ public class TicketController {
         return ticketService.getAllTickets();
     }*/
     
-    @GetMapping("/")
-    public ResponseEntity<Page<Ticket>> findAll(@PageableDefault(size = 10) Pageable pageable) {
-        Page<Ticket> tickets = ticketService.findAll(pageable);
+    @GetMapping("")
+    public ResponseEntity<List<TicketDto>> findAll(@PageableDefault(size = 10) Pageable pageable) {
+        List<TicketDto> tickets = ticketService.findAll(pageable);
         return ResponseEntity.ok(tickets);
     }
 
@@ -46,8 +47,8 @@ public class TicketController {
         return ticketService.getTicketById(id);
     }
 
-    @PostMapping("/")
-    public Ticket createTicket(@RequestBody Ticket ticket) {
+    @PostMapping("/create")
+    public Ticket createTicket(@RequestBody TicketDto ticket) {
         return ticketService.createTicket(ticket);
     }
 

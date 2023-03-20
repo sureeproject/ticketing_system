@@ -44,7 +44,7 @@ public class OrderService {
 	}
 
 	public Order createOrder(Long userId, Long ticketId) {
-		User user = userRepository.findById(userId)
+		/*User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 		Ticket ticket = ticketRepository.findById(ticketId)
 				.orElseThrow(() -> new ResourceNotFoundException("Ticket", "id", ticketId));
@@ -53,6 +53,17 @@ public class OrderService {
 		order.setTicket(ticket);
 		order.setCreateTime(LocalDateTime.now());
 		order.setUpdateTime(LocalDateTime.now());
+		return orderRepository.save(order);*/
+
+		User user = userRepository.getOne(userId);
+		Ticket ticket = ticketRepository.getOne(ticketId);
+
+		Order order = new Order();
+		order.setUser(user);
+		order.setTicket(ticket);
+		order.setCreateTime(LocalDateTime.now());
+		order.setUpdateTime(LocalDateTime.now());
+
 		return orderRepository.save(order);
 	}
 }

@@ -26,6 +26,7 @@ public class UserService {
 	public UserDto getUserByEmail(String email) {
 		User user = userRepository.findByEmail(email)
 				.orElseThrow(() -> new NotFoundException("User not found :: " + email));
+		user.setPassword("");
 		return (UserDto)ObjectMapper.copyObject(user, new UserDto());
 	}
 
