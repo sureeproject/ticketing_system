@@ -31,11 +31,6 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-    /*@GetMapping("/")
-    public List<Ticket> getAllTickets() {
-        return ticketService.getAllTickets();
-    }*/
-    
     @GetMapping("")
     public ResponseEntity<List<TicketDto>> findAll(@PageableDefault(size = 10) Pageable pageable) {
         List<TicketDto> tickets = ticketService.findAll(pageable);
@@ -49,6 +44,7 @@ public class TicketController {
 
     @PostMapping("/create")
     public Ticket createTicket(@RequestBody TicketDto ticket) {
+
         return ticketService.createTicket(ticket);
     }
 
@@ -61,32 +57,5 @@ public class TicketController {
     public void deleteTicket(@PathVariable("id") Long id) {
         ticketService.deleteTicket(id);
     }
-    
-   /* @GetMapping("/status/{status}")
-    public ResponseEntity<List<Ticket>> getAllTicketsByStatus(@PathVariable String status) {
-        TicketStatus ticketStatus = TicketStatus.valueOf(status.toUpperCase());
-        List<Ticket> tickets = ticketService.getAllTicketsByStatus(ticketStatus);
-        if (tickets.isEmpty()) {
-            throw new ResourceNotFoundException("Ticket", "status", status);
-        }
-        return new ResponseEntity<>(tickets, HttpStatus.OK);
-    }*/
-    @GetMapping("/status/{status}")
-    public ResponseEntity<Page<Ticket>> findAllByStatus(@RequestParam TicketStatus status,
-                                                        @PageableDefault(size = 10) Pageable pageable) {
-        Page<Ticket> tickets = ticketService.findAllByStatus(status, pageable);     
-        if (tickets.isEmpty()) {
-            throw new ResourceNotFoundException("Ticket", "status", status);
-        }
-        return ResponseEntity.ok(tickets);
-    }
-    
-    @GetMapping("/status")
-    public ResponseEntity<Page<Ticket>> findAllByStatus(@RequestParam List<TicketStatus> status,
-                                                         @RequestParam(defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "10") int size,
-                                                         @RequestParam(defaultValue = "id,asc") String[] sort) {
-        Page<Ticket> tickets = ticketService.getAllTicketsByStatus(status, PageRequest.of(page, size, Sort.by(sort)));
-        return ResponseEntity.ok(tickets);
-    }
+
 }

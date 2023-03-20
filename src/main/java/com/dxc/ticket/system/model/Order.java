@@ -31,14 +31,20 @@ public class Order {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "fk_user_id")
+	@JoinColumn(name = "fk_user_id", insertable = false, updatable = false)
 	@JsonIgnore
 	private User user;
 
 	@ManyToOne
-	@JoinColumn(name = "fk_ticket_id")
+	@JoinColumn(name = "fk_ticket_id", insertable = false, updatable = false)
 	@JsonIgnore
 	private Ticket ticket;
+
+	@Column(name = "fk_ticket_id")
+	private Long ticketId;
+
+	@Column(name = "fk_user_id")
+	private Long userId;
 
 	@Column(name = "create_time")
 	private LocalDateTime createTime;

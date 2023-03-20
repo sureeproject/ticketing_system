@@ -32,5 +32,6 @@ CREATE TABLE user_order (
   update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (pk_order_id),
   FOREIGN KEY (fk_user_id) REFERENCES user(pk_user_id),
-  FOREIGN KEY (fk_ticket_id) REFERENCES ticket(pk_ticket_id)
+  FOREIGN KEY (fk_ticket_id) REFERENCES ticket(pk_ticket_id),
+  CONSTRAINT unique_ticket_user UNIQUE (fk_ticket_id, fk_user_id)
 );
