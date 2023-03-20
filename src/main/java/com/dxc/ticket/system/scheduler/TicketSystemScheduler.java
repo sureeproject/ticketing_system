@@ -29,8 +29,9 @@ public class TicketSystemScheduler {
                Duration duration = Duration.between(ticket.getCreateTime(), LocalDateTime.now());
                if (duration.toMinutes() > 10) {
                    ticket.setStatus(TicketStatus.AVALIABLE);
+                   ticket.setUpdateTime(LocalDateTime.now());
                    ticketRepository.save(ticket);
-                  orderRepository.deleteByTicketId(ticket.getId());
+                   orderRepository.deleteByTicketId(ticket.getId());
                }
            }
         }
