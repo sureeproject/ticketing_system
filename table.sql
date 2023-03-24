@@ -1,6 +1,7 @@
-CREATE DATABASE ticket_system;
-
-USE ticket_system;
+use ticket_system;
+drop table user;
+drop table ticket;
+drop table user_order;
 
 CREATE TABLE user (
   pk_user_id INT NOT NULL AUTO_INCREMENT,
@@ -36,7 +37,3 @@ CREATE TABLE user_order (
   FOREIGN KEY (fk_ticket_id) REFERENCES ticket(pk_ticket_id),
   CONSTRAINT unique_ticket_user UNIQUE (fk_ticket_id, fk_user_id)
 );
-
-ALTER TABLE user ADD CONSTRAINT unique_email UNIQUE (email(100));
-
-alter table user modify email TEXT;
