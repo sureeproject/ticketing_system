@@ -32,7 +32,7 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
     
-    @GetMapping("/users/{userId}/tickets/{ticketId}")
+    @PostMapping("/users/{userId}/tickets/{ticketId}")
     public ResponseEntity<Order> createOrder(@PathVariable Long userId, @PathVariable Long ticketId) {
         Order order = orderService.createOrder(userId, ticketId);
         return ResponseEntity.ok(order);

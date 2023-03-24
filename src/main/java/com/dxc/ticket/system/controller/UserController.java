@@ -1,6 +1,7 @@
 package com.dxc.ticket.system.controller;
 
 import org.apache.tomcat.util.http.parser.Authorization;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dxc.ticket.system.dto.UserDto;
 import com.dxc.ticket.system.service.UserService;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -36,14 +40,21 @@ public class UserController {
             userDto.setPassword(hashPwd);
             UserDto updatedUser =  userService.createUser(userDto);
             if (updatedUser.getId() > 0) {
-                response = ResponseEntity
-                        .status(HttpStatus.CREATED)
-                        .body("Given user details are successfully registered");
+                return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
             }
         } catch (Exception ex) {
-            response = ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An exception occured due to " + ex.getMessage());
+            if(ex instanceof DataIntegrityViolationException){
+                Map<String,String> errors = new LinkedHashMap<>();
+                errors.put("error","User Already exist! Choose different email");
+                response = ResponseEntity
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(errors);
+
+            }else {
+                response = ResponseEntity
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Internal Server error");
+            }
         }
         return response;
 
@@ -51,8 +62,8 @@ public class UserController {
 
     @GetMapping("/signin")
     public ResponseEntity<UserDto> signIn(Authentication userDto) {
-        UserDto createdUser = userService.getUserByEmail(userDto.getName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        UserDto user = userService.getUserByEmail(userDto.getName());
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
     
     

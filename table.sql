@@ -4,13 +4,14 @@ USE ticket_system;
 
 CREATE TABLE user (
   pk_user_id INT NOT NULL AUTO_INCREMENT,
-  email VARCHAR(255) NOT NULL,
+  email TEXT NOT NULL,
   password VARCHAR(255) NOT NULL,
   first_name VARCHAR(255),
   last_name VARCHAR(255),
   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (pk_user_id)
+  PRIMARY KEY (pk_user_id),
+  CONSTRAINT unique_email UNIQUE (email(100))
 );
 
 
@@ -35,3 +36,7 @@ CREATE TABLE user_order (
   FOREIGN KEY (fk_ticket_id) REFERENCES ticket(pk_ticket_id),
   CONSTRAINT unique_ticket_user UNIQUE (fk_ticket_id, fk_user_id)
 );
+
+ALTER TABLE user ADD CONSTRAINT unique_email UNIQUE (email(100));
+
+alter table user modify email TEXT;
