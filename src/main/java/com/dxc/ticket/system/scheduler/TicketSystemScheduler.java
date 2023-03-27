@@ -1,5 +1,6 @@
 package com.dxc.ticket.system.scheduler;
 
+import com.dxc.ticket.system.model.Order;
 import com.dxc.ticket.system.model.Ticket;
 import com.dxc.ticket.system.model.TicketStatus;
 import com.dxc.ticket.system.repository.OrderRepository;
@@ -26,12 +27,15 @@ public class TicketSystemScheduler {
         List<Ticket> tickets = ticketRepository.findByStatus(TicketStatus.LOCKED);
         if(!tickets.isEmpty()){
            for(Ticket ticket : tickets){
-               Duration duration = Duration.between(ticket.getCreateTime(), LocalDateTime.now());
-               if (duration.toMinutes() > 10) {
-                   ticket.setStatus(TicketStatus.AVALIABLE);
-                   ticket.setUpdateTime(LocalDateTime.now());
-                   ticketRepository.save(ticket);
-                   orderRepository.deleteByTicketId(ticket.getId());
+               Order order = orderRepository.findByTicketId(ticket.getId());
+               if(order != null) {
+                   Duration duration = Duration.between(order.getCreateTime(), LocalDateTime.now());
+                   if (duration.toMinutes() > 10) {
+                       ticket.setStatus(TicketStatus.AVALIABLE);
+                       ticket.setUpdateTime(LocalDateTime.now());
+                       ticketRepository.save(ticket);
+                       orderRepository.deleteById(order.getId());
+                   }
                }
            }
         }
